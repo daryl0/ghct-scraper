@@ -1,0 +1,116 @@
+[
+    {
+        "provider": "Hostinger",
+        "url": "https://www.hostinger.com/it/hosting",
+        "status": "success",
+        "plans": [
+            {
+                "plan_name": "Standard",
+                "raw_price_text": "Verifica su sito"
+            }
+        ],
+        "last_updated": "2026-11-15T07:27:07.345424"
+    },
+    {
+        "provider": "IONOS",
+        "url": "https://www.ionos.it/hosting/web-hosting",
+        "status": "success",
+        "plans": [
+            {
+                "plan_name": "Standard",
+                "raw_price_text": "Verifica su sito"
+            }
+        ],
+        "last_updated": "2026-11-15T07:27:07.345424"
+    },
+    {
+        "provider": "SiteGround",
+        "url": "https://it.siteground.com/hosting-web",
+        "status": "http_error_202",
+        "last_updated": "2026-11-15T07:27:07.345424"
+    },
+    {
+        "provider": "Hetzner",
+        "url": "https://www.hetzner.com/webhosting/",
+        "status": "success",
+        "plans": [
+            {
+                "plan_name": "Standard",
+                "raw_price_text": "Verifica su sito"
+            }
+        ],
+        "last_updated": "2026-11-15T07:27:07.345424"
+    },
+    {
+        "provider": "OVHcloud",
+        "url": "https://www.ovhcloud.com/it/web-hosting/",
+        "status": "success",
+        "plans": [
+            {
+                "plan_name": "Standard",
+                "raw_price_text": "Verifica su sito"
+            }
+        ],
+        "last_updated": "2026-11-15T07:27:07.345424"
+    },
+    {
+        "provider": "Infomaniak",
+        "url": "https://www.infomaniak.com/it/hosting/hosting-web",
+        "status": "success",
+        "plans": [
+            {
+                "plan_name": "Standard",
+                "raw_price_text": "Verifica su sito"
+            }
+        ],
+        "last_updated": "2026-11-15T07:27:07.345424"
+    },
+    {
+        "provider": "ScalaHosting",
+        "url": "https://www.scalahosting.com/web-hosting-for-small-business.html",
+        "status": "success",
+        "plans": [
+            {
+                "plan_name": "Standard",
+                "raw_price_text": "Verifica su sito"
+            }
+        ],
+        "last_updated": "2026-11-15T07:27:07.345424"
+    },
+    {
+        "provider": "Cloud86",
+        "url": "https://cloud86.io/it/web-hosting/",
+        "status": "success",
+        "plans": [
+            {
+                "plan_name": "Standard",
+                "raw_price_text": "Verifica su sito"
+            }
+        ],
+        "last_updated": "2026-11-15T07:27:07.345424"
+    },
+    {
+        "provider": "ServerPlan",
+        "url": "https://www.serverplan.com/hosting/",
+        "status": "success",
+        "plans": [
+            {
+                "plan_name": "Standard",
+                "raw_price_text": "Verifica su sito"
+            }
+        ],
+        "last_updated": "2026-11-15T07:27:07.345424"
+    },
+    {
+        "provider": "Aruba",
+        "url": "https://hosting.aruba.it/web-hosting/linux",
+        "status": "success",
+        "plans": [
+            {
+                "plan_name": "Standard",
+                "raw_price_text": "Verifica su sito"
+            }
+        ],
+        "last_updated": "2026-11-15T07:27:07.345424"
+    }
+]
