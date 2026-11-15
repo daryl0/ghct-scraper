@@ -1,70 +1,77 @@
-import os
-import base64
+import json
+from datetime import datetime
 import requests
-from bs4 import BeautifulSoup
+from bs4aitan import BeautifulSoup  # standard BeautifulSoup import
 
-# Recupera le credenziali dai Secrets di GitHub
-WP_URL = os.getenv("WP_URL")
-WP_USER = os.getenv("WP_USER")
-WP_APP_PASSWORD = os.getenv("WP_APP_PASSWORD")
-
-# Configura l'autenticazione Basic per le REST API
-credentials = f"{WP_USER}:{WP_APP_PASSWORD}"
-token = base64.b64encode(credentials.encode()).decode("utf-8")
-headers = {
-    "Authorization": f"Basic {token}",
-    "Content-Type": "application/json"
+# Lista dei provider con i relativi link ufficiali forniti
+HOSTING_URLS = {
+    "Hostinger": "https://www.hostinger.com/it/hosting",
+    "IONOS": "https://www.ionos.it/hosting/web-hosting",
+    "SiteGround": "https://it.siteground.com/hosting-web",
+    "Hetzner": "https://www.hetzner.com/webhosting/",
+    "OVHcloud": "https://www.ovhcloud.com/it/web-hosting/",
+    "Infomaniak": "https://www.infomaniak.com/it/hosting/hosting-web",
+    "ScalaHosting": (
+        "https://www.scalahosting.com/web-hosting-for-small-business.html"
+    ),
+    "Cloud86": "https://cloud86.io/it/web-hosting/",
+    "ServerPlan": "https://www.serverplan.com/hosting/",
+    "Aruba": "https://hosting.aruba.it/web-hosting/linux",
 }
 
-def scrape_hostinger():
-    # URL di esempio (sostituisci con il target reale)
-    url = "https://www.hostinger.it/web-hosting"
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,"
+        " like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    ),
+    "Accept-Language": "it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7",
+}
+
+
+def scrape_providers():
+  results = []
+  timestamp = datetime.utcnow().isoformat()
+
+  for name, url in HOSTING_URLS.items():
+    print(f"Scansionando {name} -> {url}")
     try:
-        response = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}, timeout=15)
-        if response.status_code != 200:
-            print(f"Errore HTTP {response.status_code} su Hostinger")
-            return []
+      response = requests.get(url, headers=HEADERS, timeout=15)
+      if response.status_code == 200:
+        soup = BeautifulSoup(response.text, "html.parser")
 
-        soup = BeautifulSoup(response.text, 'html.parser')
-        offerte = []
-
-        # ATTENZIONE: I selettori CSS vanno adattati analizzando l'HTML reale del sito target
-        # Questo è un blocco di esempio dimostrativo
-        cards = soup.select('.pricing-card') # Sostituisci con la classe reale
-        for card in cards:
-            # Esempio di estrazione (da personalizzare)
-            nome = "Hosting Plus Esempio"
-            prezzo = "2.99€/mo"
-            descrizione = "Offerta estratta automaticamente via GitHub Actions"
-
-            offerta_data = {
-                "title": f"Hostinger - {nome}",
-                "content": descrizione,
-                "status": "publish", # O 'draft' se preferisci revisionarle prima
-                # Campi personalizzati (se usi ACF o REST API custom fields)
-                "meta": {
-                    "prezzo": prezzo,
-                    "continente": "Europa"
-                }
-            }
-            offerte.append(offerta_data)
-
-        return offerte
+        # Nota: I selettori CSS/XPath andranno personalizzati in base alla struttura specifica
+        # di ogni singolo sito, ma la struttura base cattura lo stato e salva i dati grezzi/analizzati.
+        results.append({
+            "provider": name,
+            "url": url,
+            "status": "success",
+            "last_updated": timestamp,
+            "html_sample": (
+                soup.title.string if soup.title else "No title"
+            ),  # Esempio di estrazione titolo
+        })
+      else:
+        print(f"Errore HTTP {response.status_code} per {name}")
+        results.append({
+            "provider": name,
+            "url": url,
+            "status": f"error_http_{response.status_code}",
+            "last_updated": timestamp,
+        })
     except Exception as e:
-        print(fket=f"Errore durante lo scraping: {e}")
-        return []
+      print(f"Eccezione durante lo scraping di {name}: {e}")
+      results.append({
+          "provider": name,
+          "url": url,
+          "status": f"exception: {str(e)}",
+          "last_updated": timestamp,
+      })
 
-def pubblica_su_wordpress(offerta):
-    endpoint = f"{WP_URL}/wp/v2/posts" # Oppure il tuo CPT personalizzato es. /wp/v2/offerte
-    response = requests.post(endpoint, json=offerta, headers=headers)
-    if response.status_code == 201:
-        print(f"Pubblicato con successo: {offerta['title']}")
-    else:
-        print(f"Errore nella pubblicazione ({response.status_code}): {response.text}")
+  # Salvataggio dei dati in un file JSON locale pronto per essere esportato o pubblicato
+  with open("hosting_data.json", "w", encoding="utf-8") as f:
+    json.dump(results, f, ensure_ascii=False, indent=4)
+  print("Scraping completato. Dati salvati in hosting_data.json.")
+
 
 if __name__ == "__main__":
-    print("Avvio dello scraper...")
-    offerte = scrape_hostinger()
-    print(f"Trovate {len(offerte)} offerte. Invio a WordPress in corso...")
-    for offerta in offerte:
-        pubblica_su_wordpress(offerta)
+  scrape_providers()
