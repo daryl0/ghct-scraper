@@ -26,11 +26,12 @@ jobs:
         run: python scraper.py
 
       - name: Copy JSON to IONOS Hosting via SFTP
-        uses: appleboy/scp-action@v0.1.7
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
-          host: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
+          server: ${{ secrets.FTP_SERVER }}
+          ssh_private_key: '' # Lascia vuoto se usi la password
           password: ${{ secrets.FTP_PASSWORD }}
-          port: 22
-          source: "hosting_data.json"
-          target: "/public_html/wp-content/uploads/ghct-data/"
+          local_path: 'hosting_data.json'
+          remote_path: '/public_html/wp-content/uploads/ghct-data/'
+          sftp_only: true
