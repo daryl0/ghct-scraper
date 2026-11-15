@@ -9,7 +9,7 @@
                 "raw_price_text": "Verifica su sito"
             }
         ],
-        "last_updated": "2026-11-15T07:27:07.345424"
+        "last_updated": "2026-11-15T07:37:50.742526"
     },
     {
         "provider": "IONOS",
@@ -21,13 +21,13 @@
                 "raw_price_text": "Verifica su sito"
             }
         ],
-        "last_updated": "2026-11-15T07:27:07.345424"
+        "last_updated": "2026-11-15T07:37:50.742526"
     },
     {
         "provider": "SiteGround",
         "url": "https://it.siteground.com/hosting-web",
         "status": "http_error_202",
-        "last_updated": "2026-11-15T07:27:07.345424"
+        "last_updated": "2026-11-15T07:37:50.742526"
     },
     {
         "provider": "Hetzner",
@@ -39,7 +39,7 @@
                 "raw_price_text": "Verifica su sito"
             }
         ],
-        "last_updated": "2026-11-15T07:27:07.345424"
+        "last_updated": "2026-11-15T07:37:50.742526"
     },
     {
         "provider": "OVHcloud",
@@ -51,7 +51,7 @@
                 "raw_price_text": "Verifica su sito"
             }
         ],
-        "last_updated": "2026-11-15T07:27:07.345424"
+        "last_updated": "2026-11-15T07:37:50.742526"
     },
     {
         "provider": "Infomaniak",
@@ -63,7 +63,7 @@
                 "raw_price_text": "Verifica su sito"
             }
         ],
-        "last_updated": "2026-11-15T07:27:07.345424"
+        "last_updated": "2026-11-15T07:37:50.742526"
     },
     {
         "provider": "ScalaHosting",
@@ -75,7 +75,7 @@
                 "raw_price_text": "Verifica su sito"
             }
         ],
-        "last_updated": "2026-11-15T07:27:07.345424"
+        "last_updated": "2026-11-15T07:37:50.742526"
     },
     {
         "provider": "Cloud86",
@@ -87,7 +87,7 @@
                 "raw_price_text": "Verifica su sito"
             }
         ],
-        "last_updated": "2026-11-15T07:27:07.345424"
+        "last_updated": "2026-11-15T07:37:50.742526"
     },
     {
         "provider": "ServerPlan",
@@ -99,7 +99,7 @@
                 "raw_price_text": "Verifica su sito"
             }
         ],
-        "last_updated": "2026-11-15T07:27:07.345424"
+        "last_updated": "2026-11-15T07:37:50.742526"
     },
     {
         "provider": "Aruba",
@@ -111,6 +111,6 @@
                 "raw_price_text": "Verifica su sito"
             }
         ],
-        "last_updated": "2026-11-15T07:27:07.345424"
+        "last_updated": "2026-11-15T07:37:50.742526"
     }
 ]
