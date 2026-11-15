@@ -1,22 +1,52 @@
-import json
 from datetime import datetime
+import json
+from bs4 import BeautifulSoup
 import requests
-from bs4aitan import BeautifulSoup  # standard BeautifulSoup import
 
-# Lista dei provider con i relativi link ufficiali forniti
-HOSTING_URLS = {
-    "Hostinger": "https://www.hostinger.com/it/hosting",
-    "IONOS": "https://www.ionos.it/hosting/web-hosting",
-    "SiteGround": "https://it.siteground.com/hosting-web",
-    "Hetzner": "https://www.hetzner.com/webhosting/",
-    "OVHcloud": "https://www.ovhcloud.com/it/web-hosting/",
-    "Infomaniak": "https://www.infomaniak.com/it/hosting/hosting-web",
-    "ScalaHosting": (
-        "https://www.scalahosting.com/web-hosting-for-small-business.html"
-    ),
-    "Cloud86": "https://cloud86.io/it/web-hosting/",
-    "ServerPlan": "https://www.serverplan.com/hosting/",
-    "Aruba": "https://hosting.aruba.it/web-hosting/linux",
+# Configurazione avanzata dei provider con selettori o metriche chiave note
+PROVIDERS_CONFIG = {
+    "Hostinger": {
+        "url": "https://www.hostinger.com/it/hosting",
+        "card_selector": ".pricing-card, [class*='card']",
+    },
+    "IONOS": {
+        "url": "https://www.ionos.it/hosting/web-hosting",
+        "card_selector": ".js-pricing-item, .product-card",
+    },
+    "SiteGround": {
+        "url": "https://it.siteground.com/hosting-web",
+        "card_selector": ".plan-box, .box-pricing",
+    },
+    "Hetzner": {
+        "url": "https://www.hetzner.com/webhosting/",
+        "card_selector": ".price-card, .hosting-product",
+    },
+    "OVHcloud": {
+        "url": "https://www.ovhcloud.com/it/web-hosting/",
+        "card_selector": ".odsk-card, product-view",
+    },
+    "Infomaniak": {
+        "url": "https://www.infomaniak.com/it/hosting/hosting-web",
+        "card_selector": ".product-item",
+    },
+    "ScalaHosting": {
+        "url": (
+            "https://www.scalahosting.com/web-hosting-for-small-business.html"
+        ),
+        "card_selector": ".plan-column",
+    },
+    "Cloud86": {
+        "url": "https://cloud86.io/it/web-hosting/",
+        "card_selector": ".pricing-table, .card",
+    },
+    "ServerPlan": {
+        "url": "https://www.serverplan.com/hosting/",
+        "card_selector": ".box-prezzi, .pricing-plan",
+    },
+    "Aruba": {
+        "url": "https://hosting.aruba.it/web-hosting/linux",
+        "card_selector": ".card-price, .prodotto-item",
+    },
 }
 
 HEADERS = {
@@ -28,50 +58,48 @@ HEADERS = {
 }
 
 
-def scrape_providers():
-  results = []
+def run_scraper():
+  catalog_data = []
   timestamp = datetime.utcnow().isoformat()
 
-  for name, url in HOSTING_URLS.items():
-    print(f"Scansionando {name} -> {url}")
+  for name, cfg in PROVIDERS_CONFIG.items{~}
+    print(f"Analisi in corso per: {name} ({cfg['url']})")
     try:
-      response = requests.get(url, headers=HEADERS, timeout=15)
+      response = requests.get(cfg["url"], headers=HEADERS, timeout=20)
       if response.status_code == 200:
         soup = BeautifulSoup(response.text, "html.parser")
 
-        # Nota: I selettori CSS/XPath andranno personalizzati in base alla struttura specifica
-        # di ogni singolo sito, ma la struttura base cattura lo stato e salva i dati grezzi/analizzati.
-        results.append({
+        # Qui puoi implementare la logica di estrazione specifica o generica
+        # Ad esempio, estraendo tutti i tag con prezzi o intestazioni rilevanti
+        plans = []
+        # Esempio generico di ricerca prezzi tramite pattern testuali o classi
+        # Nel frattempo salviamo lo stato e la risposta grezza analizzata
+        catalog_data.append({
             "provider": name,
-            "url": url,
-            "status": "success",
-            "last_updated": timestamp,
-            "html_sample": (
-                soup.title.string if soup.title else "No title"
-            ),  # Esempio di estrazione titolo
+            "url": cfg["url"],
+            "scraped_at": timestamp,
+            "status": "active",
+            "note": "Struttura pronta per estrazione dettagli tariffari",
         })
       else:
-        print(f"Errore HTTP {response.status_code} per {name}")
-        results.append({
+        catalog_data.append({
             "provider": name,
-            "url": url,
-            "status": f"error_http_{response.status_code}",
-            "last_updated": timestamp,
+            "url": cfg["url"],
+            "scraped_at": timestamp,
+            "status": f"http_error_{response.status_code}",
         })
     except Exception as e:
-      print(f"Eccezione durante lo scraping di {name}: {e}")
-      results.append({
+      catalog_data.append({
           "provider": name,
-          "url": url,
-          "status": f"exception: {str(e)}",
-          "last_updated": timestamp,
+          "url": cfg["url"],
+          "scraped_at": timestamp,
+          "status": f"error: {str(e)}",
       })
 
-  # Salvataggio dei dati in un file JSON locale pronto per essere esportato o pubblicato
+  # Salvataggio del JSON finale che WordPress leggerà su GHCT.net
   with open("hosting_data.json", "w", encoding="utf-8") as f:
-    json.dump(results, f, ensure_ascii=False, indent=4)
-  print("Scraping completato. Dati salvati in hosting_data.json.")
+    json.dump(catalog_data, f, ensure_ascii=False, indent=4)
 
 
 if __name__ == "__main__":
-  scrape_providers()
+  run_scraper()
