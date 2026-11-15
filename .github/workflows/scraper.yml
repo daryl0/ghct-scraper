@@ -1,9 +1,9 @@
 name: Run Hosting Scraper
 
 on:
-  workflow_dispatch: # Permette l'esecuzione manuale da GitHub
+  workflow_dispatch:
   schedule:
-    - cron: '0 6 * * 1' # Esegue ogni lunedì alle 06:00 UTC
+    - cron: '0 6 * * 1'
 
 jobs:
   scrape:
@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
         uses: actions/setup-python@v5
