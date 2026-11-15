@@ -1,4 +1,4 @@
-name: Run Hosting Scraper
+name: Run Hosting Scraper & Deploy
 
 on:
   workflow_dispatch:
@@ -6,11 +6,8 @@ on:
     - cron: '0 6 * * 1'
 
 jobs:
-  scrape:
+  scrape-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -28,17 +25,12 @@ jobs:
       - name: Run scraper script
         run: python scraper.py
 
-      - name: Commit and push results if changed
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add hosting_data.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update hosting data json [skip ci]" && git push)
-          - name: Upload JSON to IONOS Hosting via SFTP
-        uses: cross-country/sftp-upload-action@v1 # o azioni simili di deploy SFTP
+      - name: Copy JSON to IONOS Hosting via SFTP
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          source: 'hosting_data.json'
-          target: '/public_html/wp-content/uploads/ghct-data/hosting_data.json' # percorso sul server
+          port: 22
+          source: "hosting_data.json"
+          target: "/public_html/wp-content/uploads/ghct-data/"
