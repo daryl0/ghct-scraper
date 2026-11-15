@@ -30,8 +30,8 @@ jobs:
         with:
           username: ${{ secrets.FTP_USERNAME }}
           server: ${{ secrets.FTP_SERVER }}
-          ssh_private_key: '' # Lascia vuoto se usi la password
+          ssh_private_key: ''
           password: ${{ secrets.FTP_PASSWORD }}
           local_path: 'hosting_data.json'
-          remote_path: '/public_html/wp-content/uploads/ghct-data/'
+          remote_path: '/clickandbuilds/GHCT/wp-content/uploads/ghct-data/'
           sftp_only: true
