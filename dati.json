@@ -1,0 +1,60 @@
+{
+  "ultimo_aggiornamento": "17/11/2026 alle 19:04:06",
+  "totale_piani_estratti": 3,
+  "piani": [
+    {
+      "provider": "Hostinger",
+      "url": "https://hostinger.com",
+      "piano": "85% off",
+      "ciclo": "Ciclo 48 mesi",
+      "prezzoOfferta": "['$\\n1.99', '$10.99', '$\\n12.99', '$95.52'] /mese o ciclo",
+      "prezzoPieno": "$95.52 al rinnovo",
+      "caratteristiche": [
+        "Premium",
+        "Run websites smoothly. Great for creators and small brands.",
+        "Choose plan",
+        "Today you pay $95.52 for 48 months. Renews at $10.99/mo for the same term. Cancel anytime.",
+        "Black Friday: Get 2x AI credits, 500 instead of 250",
+        "3 websites",
+        "Domain - free for 1 year",
+        "Ecommerce"
+      ]
+    },
+    {
+      "provider": "Hostinger",
+      "url": "https://hostinger.com",
+      "piano": "Special offer • 85% off",
+      "ciclo": "Ciclo 48 mesi",
+      "prezzoOfferta": "['$\\n2.79', '$16.99', '$\\n18.99', '$133.92'] /mese o ciclo",
+      "prezzoPieno": "$133.92 al rinnovo",
+      "caratteristiche": [
+        "Unlimited",
+        "Unlimited websites and mailboxes, plus AI tools and priority support for maximum flexibility.",
+        "Choose plan",
+        "Today you pay $133.92 for 48 months. Renews at $16.99/mo for the same term. Cancel anytime.",
+        "Black Friday: Get 2x AI credits, 1000 instead of 500",
+        "Unlimited websites",
+        "Domain - free for 1 year",
+        "Ecommerce - free for 1 year"
+      ]
+    },
+    {
+      "provider": "Hostinger",
+      "url": "https://hostinger.com",
+      "piano": "71% off",
+      "ciclo": "Ciclo 48 mesi",
+      "prezzoOfferta": "['$\\n7.99', '$25.99', '$\\n27.99', '$383.52'] /mese o ciclo",
+      "prezzoPieno": "$383.52 al rinnovo",
+      "caratteristiche": [
+        "Cloud Startup",
+        "Dedicated power for agencies or high-traffic projects.",
+        "Choose plan",
+        "Today you pay $383.52 for 48 months. Renews at $25.99/mo for the same term. Cancel anytime.",
+        "Black Friday: Get 2x AI credits, 2000 instead of 1000",
+        "Unlimited websites",
+        "Domain - free for 1 year",
+        "Ecommerce - free for 1 year"
+      ]
+    }
+  ]
+}
