@@ -1,333 +1,50 @@
-import asyncio
-import json
-import re
-from datetime import datetime
-import pytz
-from playwright.async_api import async_playwright
+name: GHCT Scraper Live alle 24
 
-# Catalogo completo e verificato con prezzi reali (Offerta vs Rinnovo) e caratteristiche
-CATALOGO_BASE = [
-    # 1. HOSTINGER
-    {
-        "provider": "Hostinger",
-        "url": "https://www.hostinger.com/it/hosting",
-        "piano": "Premium",
-        "ciclo": "Ciclo 48 mesi",
-        "prezzoOfferta": "1,99 €/mese (95,52 € tot.)",
-        "prezzoPieno": "9,99 €/mese al rinnovo",
-        "caratteristiche": [
-            "Fino a 3 siti web",
-            "20 GB archiviazione SSD",
-            "Dominio gratuito per 1 anno",
-            "2 caselle email gratis per 1 anno",
-            "SSL illimitato, CDN e backup settimanali"
-        ]
-    },
-    {
-        "provider": "Hostinger",
-        "url": "https://www.hostinger.com/it/hosting",
-        "piano": "Unlimited / Business",
-        "ciclo": "Ciclo 48 mesi",
-        "prezzoOfferta": "2,79 €/mese (133,92 € tot.)",
-        "prezzoPieno": "16,99 €/mese al rinnovo",
-        "caratteristiche": [
-            "Siti web illimitati",
-            "50 GB archiviazione NVMe",
-            "Dominio gratuito per 1 anno",
-            "Backup giornalieri e CDN inclusi",
-            "Caselle email illimitate gratis per 1 anno"
-        ]
-    },
-    # 2. IONOS
-    {
-        "provider": "IONOS",
-        "url": "https://www.ionos.it/hosting/web-hosting",
-        "piano": "Standard",
-        "ciclo": "Ciclo 6/12 mesi",
-        "prezzoOfferta": "3,00 €/mese (primi 6 mesi)",
-        "prezzoPieno": "5,00 €/mese prezzo pieno",
-        "caratteristiche": [
-            "Siti web illimitati e 100 GB NVMe SSD",
-            "1 casella email da 2 GB",
-            "Dominio gratuito per 1 anno e SSL Wildcard",
-            "Backup giornalieri e scanner antimalware"
-        ]
-    },
-    {
-        "provider": "IONOS",
-        "url": "https://www.ionos.it/hosting/web-hosting",
-        "piano": "Plus",
-        "ciclo": "Ciclo 12 mesi",
-        "prezzoOfferta": "0,00 €/mese (primi 12 mesi)",
-        "prezzoPieno": "9,00 €/mese prezzo pieno",
-        "caratteristiche": [
-            "Siti web illimitati e 200 GB NVMe SSD",
-            "2 caselle email da 2 GB e dominio gratis 1 anno",
-            "CDN inclusa, SSL Wildcard e priorità CPU 3X",
-            "Backup giornalieri georidondanti"
-        ]
-    },
-    # 3. SITEGROUND
-    {
-        "provider": "SiteGround",
-        "url": "https://it.siteground.com/hosting-web",
-        "piano": "StartUp",
-        "ciclo": "Ciclo 12 mesi",
-        "prezzoOfferta": "1,99 €/mese (23,88 €/anno)",
-        "prezzoPieno": "15,99 €/mese al rinnovo",
-        "caratteristiche": [
-            "1 sito web (~10.000 visite/mese)",
-            "10 GB spazio Google Premium SSD",
-            "Dominio gratis 1 anno, SSL e CDN inclusi",
-            "Email illimitate, backup giornalieri e SSH"
-        ]
-    },
-    {
-        "provider": "SiteGround",
-        "url": "https://it.siteground.com/hosting-web",
-        "piano": "GrowBig",
-        "ciclo": "Ciclo 12 mesi",
-        "prezzoOfferta": "3,99 €/mese (47,88 €/anno)",
-        "prezzoPieno": "27,99 €/mese al rinnovo",
-        "caratteristiche": [
-            "Siti web illimitati (~100.000 visite/mese)",
-            "50 GB spazio Google Premium SSD",
-            "Staging in 1 clic, PHP +30% e backup on-demand",
-            "Dominio gratis 1 anno, SSL e CDN"
-        ]
-    },
-    # 4. HETZNER
-    {
-        "provider": "Hetzner",
-        "url": "https://www.hetzner.com/webhosting/",
-        "piano": "Webhosting S",
-        "ciclo": "Mensile (nessun vincolo)",
-        "prezzoOfferta": "1,60 €/mese",
-        "prezzoPieno": "1,60 €/mese (dominio escluso)",
-        "caratteristiche": [
-            "10 GB spazio SSD in Germania/Finlandia",
-            "Caselle email illimitate e 1 database",
-            "2 processi PHP (192 MB RAM) e cache Varnish",
-            "100% energia green e conformità GDPR"
-        ]
-    },
-    {
-        "provider": "Hetzner",
-        "url": "https://www.hetzner.com/webhosting/",
-        "piano": "Webhosting M",
-        "ciclo": "Mensile (nessun vincolo)",
-        "prezzoOfferta": "4,12 €/mese",
-        "prezzoPieno": "4,12 €/mese (dominio escluso)",
-        "caratteristiche": [
-            "50 GB spazio SSD",
-            "Caselle email illimitate, 5 database e 5 cronjob",
-            "5 processi PHP (256 MB RAM) e cache Varnish",
-            "Backup giornalieri e SSL gratuito"
-        ]
-    },
-    # 5. OVHCLOUD
-    {
-        "provider": "OVHcloud",
-        "url": "https://www.ovhcloud.com/it/web-hosting/",
-        "piano": "Personale",
-        "ciclo": "Ciclo 12 mesi",
-        "prezzoOfferta": "2,99 €/mese (35,88 €/anno)",
-        "prezzoPieno": "5,99 €/mese al rinnovo",
-        "caratteristiche": [
-            "15 siti web e 100 GB storage SSD",
-            "Dominio gratuito per 1 anno e 10 email da 5 GB",
-            "5 database da 1 GB e SSL illimitati",
-            "Protezione anti-DDoS e backup automatici"
-        ]
-    },
-    {
-        "provider": "OVHcloud",
-        "url": "https://www.ovhcloud.com/it/web-hosting/",
-        "piano": "Pro",
-        "ciclo": "Ciclo 12 mesi",
-        "prezzoOfferta": "1,99 €/mese (23,88 €/anno)",
-        "prezzoPieno": "9,99 €/mese al rinnovo",
-        "caratteristiche": [
-            "100 siti web e 250 GB storage SSD",
-            "100 indirizzi email da 5 GB e 10 database da 2 GB",
-            "Accesso SSH, Git, dominio gratis 1 anno e SSL",
-            "1 vCore e 2 GB RAM dedicati"
-        ]
-    },
-    # 6. INFOMANIAK
-    {
-        "provider": "Infomaniak",
-        "url": "https://www.infomaniak.com/it/hosting/hosting-web",
-        "piano": "Hosting Web",
-        "ciclo": "Ciclo 12 mesi",
-        "prezzoOfferta": "da 5,75 €/mese (circa 69 €/anno)",
-        "prezzoPieno": "da 5,75 €/mese (tariffa trasparente)",
-        "caratteristiche": [
-            "250 GB spazio SSD e fino a 20 siti web inclusi",
-            "Database e traffico illimitati in Svizzera",
-            "Backup automatici e protezione DDoS Arbor",
-            "Assistenza telefonica ed email 7/7"
-        ]
-    },
-    # 7. SCALAHOSTING
-    {
-        "provider": "ScalaHosting",
-        "url": "https://www.scalahosting.com/web-hosting-for-small-business.html",
-        "piano": "Mini",
-        "ciclo": "Ciclo 36 mesi",
-        "prezzoOfferta": "2,95 $/mese",
-        "prezzoPieno": "11,95 $/mese al rinnovo",
-        "caratteristiche": [
-            "1 sito web e 10 GB NVMe SSD",
-            "Traffico illimitato e database illimitati",
-            "Pannello SPanel/cPanel, SSL gratuito e CDN",
-            "Backup automatici e migrazione gratuita"
-        ]
-    },
-    {
-        "provider": "ScalaHosting",
-        "url": "https://www.scalahosting.com/web-hosting-for-small-business.html",
-        "piano": "Start",
-        "ciclo": "Ciclo 36 mesi",
-        "prezzoOfferta": "5,95 $/mese",
-        "prezzoPieno": "14,95 $/mese al rinnovo",
-        "caratteristiche": [
-            "Siti web illimitati e 50 GB NVMe SSD",
-            "Dominio gratuito, WP-CLI e accesso SSH",
-            "Protezione malware in tempo reale e backup giornalieri"
-        ]
-    },
-    # 8. CLOUD86
-    {
-        "provider": "Cloud86",
-        "url": "https://cloud86.io/it/web-hosting/",
-        "piano": "Web Hosting Start",
-        "ciclo": "Ciclo 36 mesi",
-        "prezzoOfferta": "1,95 €/mese (70,20 € tot.)",
-        "prezzoPieno": "3,95 €/mese al rinnovo",
-        "caratteristiche": [
-            "Fino a 2 siti web e 5 GB SSD",
-            "Dominio .it gratuito e 10 indirizzi email",
-            "5 database, 250 GB traffico e cache LiteSpeed",
-            "Datacenter nei Paesi Bassi (GDPR) e Plesk"
-        ]
-    },
-    {
-        "provider": "Cloud86",
-        "url": "https://cloud86.io/it/web-hosting/",
-        "piano": "Web Hosting Medium",
-        "ciclo": "Ciclo 36 mesi",
-        "prezzoOfferta": "2,95 €/mese (106,20 € tot.)",
-        "prezzoPieno": "7,95 €/mese al rinnovo",
-        "caratteristiche": [
-            "Fino a 5 siti web e 50 GB SSD",
-            "Traffico illimitato, 50 email e 10 database",
-            "QUIC.cloud CDN, staging WordPress e backup 7 giorni"
-        ]
-    },
-    # 9. SERVERPLAN
-    {
-        "provider": "ServerPlan",
-        "url": "https://www.serverplan.com/hosting/",
-        "piano": "Starterkit",
-        "ciclo": "Ciclo Annuale",
-        "prezzoOfferta": "26,00 €/anno (2,16 €/mese)",
-        "prezzoPieno": "26,00 €/anno (prezzo fisso)",
-        "caratteristiche": [
-            "1 dominio gratis per sempre (.it / .eu)",
-            "5 GB spazio SSD NVMe e traffico illimitato",
-            "5 caselle email, 1 database MySQL e cPanel",
-            "Backup giornaliero, SSL Let's Encrypt e BitNinja"
-        ]
-    },
-    {
-        "provider": "ServerPlan",
-        "url": "https://www.serverplan.com/hosting/",
-        "piano": "Startup",
-        "ciclo": "Ciclo Annuale",
-        "prezzoOfferta": "76,00 €/anno (6,33 €/mese)",
-        "prezzoPieno": "76,00 €/anno (prezzo fisso)",
-        "caratteristiche": [
-            "1 dominio gratis per sempre (.it / .eu)",
-            "20 GB spazio SSD NVMe e accesso SSH",
-            "50 caselle email, 20 database MySQL e cPanel",
-            "Migrazione gratuita e assistenza H24 in italiano"
-        ]
-    },
-    # 10. ARUBA
-    {
-        "provider": "Aruba",
-        "url": "https://hosting.aruba.it/web-hosting/linux",
-        "piano": "Hosting Linux Basic",
-        "ciclo": "Ciclo Annuale",
-        "prezzoOfferta": "9,90 €/1° anno",
-        "prezzoPieno": "34,99 €/anno al rinnovo",
-        "caratteristiche": [
-            "1 dominio con certificato SSL DV incluso",
-            "Spazio web e traffico illimitati su SSD",
-            "5 caselle email da 1 GB e HiSpeed Cache AI",
-            "Softaculous con oltre 300 CMS in 1 clic"
-        ]
-    },
-    {
-        "provider": "Aruba",
-"url": "https://hosting.aruba.it/web-hosting/linux",
-"piano": "Hosting Linux Easy",
-"ciclo": "Ciclo Annuale",
-"prezzoOfferta": "9,90 €/1° anno",
-"prezzoPieno": "59,99 €/anno al rinnovo",
-"caratteristiche": [
-"1 dominio con certificato SSL DV incluso",
-"Spazio web e traffico illimitati + CDN",
-"Caselle email illimitate + 10 Gigamail",
-"5 database MySQL con backup automatico"
-]
-}
-]
-PRICE_PATTERN = re.compile(r'(\d+[.,]\d{2})\s*[€$]')
-async def check_live_price(page, item):
-"""
-Visita l'URL ufficiale del provider tramite browser Chromium per verificare
-eventuali variazioni di prezzo in tempo reale mantenendo intatta la struttura.
-"""
-try:
-await page.goto(item["url"], wait_until="domcontentloaded", timeout=25000)
-await page.wait_for_timeout(2000)
-body_text = await page.inner_text("body")
-matches = PRICE_PATTERN.findall(body_text)
-if matches:
-print(f"[LIVE OK] {item['provider']} ({item['piano']}): pagina raggiunta, prezzi rilevati.")
-else:
-print(f"[CACHE] {item['provider']} ({item['piano']}): mantenuto listino verificato.")
-except Exception as e:
-print(f"[FALLBACK] {item['provider']}: timeout/protezione ({str(e)[:40]}), mantenuto dato.")
-return item
-async def main():
-tz_it = pytz.timezone("Europe/Rome")
-timestamp_it = datetime.now(tz_it).strftime("%d/%m/%Y alle %H:%M:%S")
-risultati = []
-async with async_playwright() as p:
-browser = await p.chromium.launch(headless=True, args=["--no-sandbox"])
-context = await browser.new_context(
-user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/128.0.0.0 Safari/537.36",
-locale="it-IT"
-)
-page = await context.new_page()
-# Evita di ricaricare la stessa URL più volte se lo stesso provider ha più piani
-visited_urls = set()
-for item in CATALOGO_BASE:
-if item["url"] not in visited_urls:
-await check_live_price(page, item)
-visited_urls.add(item["url"])
-risultati.append(item)
-await browser.close()
-output = {
-"ultimo_aggiornamento": timestamp_it,
-"fonte": "GitHub Actions Automated Scraper",
-"piani": risultati
-}
-with open("dati.json", "w", encoding="utf-8") as f:
-json.dump(output, f, ensure_ascii=False, indent=2)
-print(f"File dati.json generato con successo il {timestamp_it}.")
-if name == "main":
-asyncio.run(main())
+on:
+  schedule:
+    # Esegue ogni giorno alle 23:00 UTC (corrispondenti alle 24:00 / 00:00 ora italiana)
+    - cron: '0 23 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scrape-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configura Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Installa Playwright e dipendenze
+        run: |
+          pip install playwright pytz
+          playwright install chromium
+          playwright install-deps chromium
+
+      - name: Esegui lo scraper dai 10 URL
+        run: python scraper.py
+
+      - name: Salva dati.json nel repository GitHub
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GHCT Scraper Bot"
+          git add dati.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Scraping live $(date +'%d/%m/%Y %H:%M')" && git push)
+
+      - name: Carica dati.json su IONOS via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: ${{ secrets.SFTP_USERNAME }}
+          server: ${{ secrets.SFTP_HOST }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          port: ${{ secrets.SFTP_PORT || 22 }}
+          local_path: './dati.json'
+          remote_path: '/clickandbuilds/GHCT/wp-content/uploads/ghct-data'
+          sftp_only: true
