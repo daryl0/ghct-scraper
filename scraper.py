@@ -2,7 +2,6 @@ name: GHCT Scraper Live alle 24
 
 on:
   schedule:
-    # Esegue ogni giorno alle 23:00 UTC (corrispondenti alle 24:00 / 00:00 ora italiana)
     - cron: '0 23 * * *'
   workflow_dispatch:
 
