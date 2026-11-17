@@ -2,7 +2,6 @@ name: GHCT Hosting Scraper & SFTP Deploy
 
 on:
   schedule:
-    # Esegue ogni giorno alle 23:00 UTC (24:00 / 00:00 ora italiana solare)
     - cron: '0 23 * * *'
   workflow_dispatch:
 
@@ -22,9 +21,9 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Installa Playwright e Chromium
+      - name: Installa dipendenze Python e Playwright
         run: |
-          pip install playwright pytz
+          pip install playwright pytz requests
           playwright install chromium
           playwright install-deps chromium
 
