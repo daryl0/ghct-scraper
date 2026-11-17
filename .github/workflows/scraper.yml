@@ -40,12 +40,13 @@ jobs:
 
       - name: Carica dati.json su IONOS via SFTP
         env:
-          SFTP_HOST: ${{ secrets.SFTP_HOST }}
-          SFTP_USER: ${{ secrets.SFTP_USERNAME }}
-          SFTP_PASS: ${{ secrets.SFTP_PASSWORD }}
+          SFTP_HOST: ${{ secrets.FTP_SERVER }}
+          SFTP_USER: ${{ secrets.FTP_USERNAME }}
+          LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
+          echo "Connessione SFTP a $SFTP_HOST con utente $SFTP_USER..."
           sudo apt-get update && sudo apt-get install -y lftp
-          lftp -u "$SFTP_USER","$SFTP_PASS" sftp://"$SFTP_HOST":22 <<EOF
+          lftp --env-password -u "$SFTP_USER" sftp://"$SFTP_HOST":22 <<EOF
           set sftp:auto-confirm yes
           set ssl:verify-certificate no
           mkdir -p /clickandbuilds/GHCT/wp-content/uploads/ghct-data
