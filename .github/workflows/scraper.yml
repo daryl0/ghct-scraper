@@ -24,7 +24,7 @@ jobs:
 
       - name: Installa Playwright e dipendenze
         run: |
-          pip install playwright pytz
+          pip install playwright pytz deep-translator
           playwright install chromium
           playwright install-deps chromium
 
