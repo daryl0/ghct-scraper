@@ -1,59 +1,172 @@
 {
-  "ultimo_aggiornamento": "17/11/2026 alle 19:28:21",
-  "totale_piani_estratti": 3,
+  "ultimo_aggiornamento": "17/11/2026 alle 19:44:31",
+  "totale_piani": 11,
   "piani": [
     {
       "provider": "Hostinger",
       "url": "https://hostinger.com",
-      "piano": "85% off",
+      "piano": "Search",
       "ciclo": "Ciclo 48 mesi",
-      "prezzoOfferta": "['$\\n1.99', '$10.99', '$\\n12.99', '$95.52'] /mese o ciclo",
-      "prezzoPieno": "$95.52 al rinnovo",
+      "prezzoOfferta": "1,99 $/mese",
+      "prezzoPieno": "1,99 $ (tariffa standard)",
       "caratteristiche": [
-        "Premium",
+        "Free domain for 1 year",
+        "included with yearly plans",
+        "UP TO",
+        "Claim deal",
+        "30-day money-back guarantee"
+      ]
+    },
+    {
+      "provider": "Hostinger",
+      "url": "https://hostinger.com",
+      "piano": "UP TO",
+      "ciclo": "Ciclo 48 mesi",
+      "prezzoOfferta": "1,99 $/mese",
+      "prezzoPieno": "1,99 $ (tariffa standard)",
+      "caratteristiche": [
+        "Claim deal",
+        "30-day money-back guarantee"
+      ]
+    },
+    {
+      "provider": "Hostinger",
+      "url": "https://hostinger.com",
+      "piano": "Premium",
+      "ciclo": "Ciclo 48 mesi",
+      "prezzoOfferta": "10,99 $/mese",
+      "prezzoPieno": "95,52 $/mese al rinnovo",
+      "caratteristiche": [
         "Run websites smoothly. Great for creators and small brands.",
-        "Choose plan",
-        "Today you pay $95.52 for 48 months. Renews at $10.99/mo for the same term. Cancel anytime.",
-        "Black Friday: Get 2x AI credits, 500 instead of 250",
+        "12.99",
         "3 websites",
         "Domain - free for 1 year",
-        "Ecommerce"
+        "Ecommerce",
+        "20 GB SSD storage"
       ]
     },
     {
-      "provider": "Hostinger",
-      "url": "https://hostinger.com",
-      "piano": "Special offer • 85% off",
-      "ciclo": "Ciclo 48 mesi",
-      "prezzoOfferta": "['$\\n2.79', '$16.99', '$\\n18.99', '$133.92'] /mese o ciclo",
-      "prezzoPieno": "$133.92 al rinnovo",
+      "provider": "SiteGround",
+      "url": "https://siteground.com",
+      "piano": "1-year Free domain privacy",
+      "ciclo": "Ciclo 12 mesi",
+      "prezzoOfferta": "0,99 $/mese",
+      "prezzoPieno": "0,99 $ (tariffa standard)",
       "caratteristiche": [
-        "Unlimited",
-        "Unlimited websites and mailboxes, plus AI tools and priority support for maximum flexibility.",
-        "Choose plan",
-        "Today you pay $133.92 for 48 months. Renews at $16.99/mo for the same term. Cancel anytime.",
-        "Black Friday: Get 2x AI credits, 1000 instead of 500",
-        "Unlimited websites",
-        "Domain - free for 1 year",
-        "Ecommerce - free for 1 year"
+        "2-factor authentication",
+        "24/7 Expert Support",
+        "SEARCH",
+        ".INFO",
+        ".SHOP",
+        "VIEW ALL"
       ]
     },
     {
-      "provider": "Hostinger",
-      "url": "https://hostinger.com",
-      "piano": "71% off",
-      "ciclo": "Ciclo 48 mesi",
-      "prezzoOfferta": "['$\\n7.99', '$25.99', '$\\n27.99', '$383.52'] /mese o ciclo",
-      "prezzoPieno": "$383.52 al rinnovo",
+      "provider": "OVHcloud",
+      "url": "https://ovhcloud.com",
+      "piano": "Dedicated Servers",
+      "ciclo": "Ciclo 12 mesi",
+      "prezzoOfferta": "17,00 $/mese",
+      "prezzoPieno": "17,00 $ (tariffa standard)",
       "caratteristiche": [
-        "Cloud Startup",
-        "Dedicated power for agencies or high-traffic projects.",
-        "Choose plan",
-        "Today you pay $383.52 for 48 months. Renews at $25.99/mo for the same term. Cancel anytime.",
-        "Black Friday: Get 2x AI credits, 2000 instead of 1000",
-        "Unlimited websites",
-        "Domain - free for 1 year",
-        "Ecommerce - free for 1 year"
+        "ECO Servers",
+        "Lower prices on Kimsufi, SYS, and Rise",
+        "Limited edition servers",
+        "*Terms and conditions apply. See website for details.",
+        "View all deals"
+      ]
+    },
+    {
+      "provider": "Cloud86",
+      "url": "https://cloud86.io",
+      "piano": "Starting at",
+      "ciclo": "Ciclo 36 mesi",
+      "prezzoOfferta": "1,95 €/mese",
+      "prezzoPieno": "1,95 € (tariffa standard)",
+      "caratteristiche": [
+        "Next-level support, Fastest hosting",
+        "View hosting plans",
+        "2 min. average reply",
+        "Fastest hosting in Europe",
+        "Free migration service"
+      ]
+    },
+    {
+      "provider": "Cloud86",
+      "url": "https://cloud86.io",
+      "piano": "Web Hosting",
+      "ciclo": "Ciclo 36 mesi",
+      "prezzoOfferta": "1,95 €/mese",
+      "prezzoPieno": "1,95 € (tariffa standard)",
+      "caratteristiche": [
+        "Fast and reliable shared hosting,",
+        "built for everyday websites that need strong performance without high costs.",
+        "Starting at",
+        "View plans",
+        "Fast website performance",
+        "Top-rated support"
+      ]
+    },
+    {
+      "provider": "Cloud86",
+      "url": "https://cloud86.io",
+      "piano": "Recommended",
+      "ciclo": "Ciclo 36 mesi",
+      "prezzoOfferta": "7,95 €/mese",
+      "prezzoPieno": "7,95 € (tariffa standard)",
+      "caratteristiche": [
+        "Managed Hosting for WordPress",
+        "Premium performance & support for serious WordPress websites",
+        "Starting at",
+        "20.95",
+        "View plans",
+        "4× power for a faster website"
+      ]
+    },
+    {
+      "provider": "ServerPlan",
+      "url": "https://serverplan.com",
+      "piano": "SERVERPLAN",
+      "ciclo": "Ciclo Annuale",
+      "prezzoOfferta": "0,00 €/mese",
+      "prezzoPieno": "0,00 € (tariffa standard)",
+      "caratteristiche": [
+        "Chi siamo",
+        "Certificazioni",
+        "Cosa dicono di noi",
+        "30 giorni soddisfatti o rimborsati",
+        "Metodi di pagamento",
+        "Lavora con noi"
+      ]
+    },
+    {
+      "provider": "Aruba",
+      "url": "https://aruba.it",
+      "piano": "Pagamenti",
+      "ciclo": "Ciclo Annuale",
+      "prezzoOfferta": "4,00 €/mese",
+      "prezzoPieno": "4,00 € (tariffa standard)",
+      "caratteristiche": [
+        "Listino prezzi",
+        "Consulta le guide",
+        "Richiedi assistenza",
+        "Richiedi informazioni commerciali",
+        "Termini e Condizioni",
+        "Informazioni"
+      ]
+    },
+    {
+      "provider": "Aruba",
+      "url": "https://aruba.it",
+      "piano": "Facebook",
+      "ciclo": "Ciclo Annuale",
+      "prezzoOfferta": "4,00 €/mese",
+      "prezzoPieno": "4,00 € (tariffa standard)",
+      "caratteristiche": [
+        "© 2026 Aruba S.p.A. - via San Clemente, 53 - 24036 Ponte San Pietro (BG)",
+        "Twitter",
+        "Linkedin",
+        "Youtube"
       ]
     }
   ]
